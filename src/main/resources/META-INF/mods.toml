@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[39,)"
+license="All rights reserved"
+[[mods]] #mandatory
+modId="sporeblossomspollinate"
+version="${file.jarVersion}" 
+displayName="Spore Blossoms Pollinate"
+logoFile="icon.png" 
+credits="Ragnaraven"
+issueTrackerURL="https://github.com/Ragnaraven/SporeBlossomsPollinate/issues"
+updateJSONURL="https://www.curseforge.com/minecraft/mc-mods/spore-blossoms-pollinate/files"
+authors="Ragnaraven" 
+description='''
+Makes spore blossoms pollinate in a configurable radius!
+.'''
+
+[[dependencies.eoarmors]]
+	    modId="forge"
+	    mandatory=true
+	    versionRange="[39,)"
+	    ordering="NONE"
+	    side="BOTH"
+
+[[dependencies.eoarmors]]
+	    modId="minecraft"
+	    mandatory=true
+	    versionRange="[1.18.1]"
+	    ordering="NONE"
+	    side="BOTH"

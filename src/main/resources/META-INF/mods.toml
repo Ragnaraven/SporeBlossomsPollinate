@@ -14,14 +14,14 @@ description='''
 Makes spore blossoms pollinate in a configurable radius!
 .'''
 
-[[dependencies.eoarmors]]
+[[dependencies.sporeblossomspollinate]]
 	    modId="forge"
 	    mandatory=true
 	    versionRange="[39,)"
 	    ordering="NONE"
 	    side="BOTH"
 
-[[dependencies.eoarmors]]
+[[dependencies.sporeblossomspollinate]]
 	    modId="minecraft"
 	    mandatory=true
 	    versionRange="[1.18.1]"

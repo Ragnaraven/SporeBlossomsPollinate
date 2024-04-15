@@ -146,7 +146,7 @@ public class SporeBlossomsPollinateModEvents {
         BlockState blockstate = level.getBlockState(blockPos);
         if (blockstate.getBlock() instanceof BonemealableBlock bonemealableblock)
         {
-            if (bonemealableblock.isValidBonemealTarget(level, blockPos, blockstate, level.isClientSide))
+            if (bonemealableblock.isValidBonemealTarget(level, blockPos, blockstate))
             {
                 if (level instanceof ServerLevel)
                 {

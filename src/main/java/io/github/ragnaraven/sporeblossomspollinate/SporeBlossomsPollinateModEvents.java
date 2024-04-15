@@ -2,15 +2,11 @@ package io.github.ragnaraven.sporeblossomspollinate;
 
 import io.github.ragnaraven.sporeblossomspollinate.config.ConfigHolder;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.BoneMealItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,7 +25,7 @@ public class SporeBlossomsPollinateModEvents {
     public static void onCropGrowPre(BlockEvent.CropGrowEvent.Pre cropGrowEvent) {
         if(cropGrowEvent.getState().getBlock() instanceof CropBlock block)
         {
-            ServerLevel level = (ServerLevel) cropGrowEvent.getWorld();
+            ServerLevel level = (ServerLevel) cropGrowEvent.getLevel();
 
             Block below = level.getBlockState(cropGrowEvent.getPos().below()).getBlock();
             if(below == Blocks.FARMLAND || below instanceof CropBlock)
@@ -40,10 +36,10 @@ public class SporeBlossomsPollinateModEvents {
                     int age = cropGrowEvent.getState().getValue(CropBlock.AGE);
                     int max = block.getMaxAge();
 
-                    if (sbs.size() > 0 && age >= max - 3) //7 -2 = 5 == The max age of vanilla crops. stage 6 and 7 are decay stages.
+                    if (!sbs.isEmpty() && age >= max - 3) //7 -2 = 5 == The max age of vanilla crops. stage 6 and 7 are decay stages.
                         cropGrowEvent.setResult(Event.Result.DENY);
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 { }
             }
         }
@@ -54,7 +50,7 @@ public class SporeBlossomsPollinateModEvents {
         if(RANDOM_IN(ConfigHolder.SERVER.RANDOM_GROW_CHANCE.get()) == 0)
         {
             BlockPos origin = cropGrowEvent.getPos();
-            ServerLevel level = (ServerLevel) cropGrowEvent.getWorld();
+            ServerLevel level = (ServerLevel) cropGrowEvent.getLevel();
 
             Block below = level.getBlockState(cropGrowEvent.getPos().below()).getBlock();
             if(below == Blocks.FARMLAND || below instanceof CropBlock) {
@@ -62,7 +58,7 @@ public class SporeBlossomsPollinateModEvents {
                 if (triggers.get(origin) == null || HAS_PASSED(triggers.get(origin))) {
                     sbs = GET_SPORE_BLOSSOMS(level, origin);
 
-                    if (sbs.size() > 0) {
+                    if (!sbs.isEmpty()) {
                         for (int x = ConfigHolder.SERVER.NEIGHBOR_RANGE_CHECK.get() / -2; x < ConfigHolder.SERVER.NEIGHBOR_RANGE_CHECK.get() / 2; x++) {
                             for (int z = ConfigHolder.SERVER.NEIGHBOR_RANGE_CHECK.get() / -2; z < ConfigHolder.SERVER.NEIGHBOR_RANGE_CHECK.get() / 2; z++) {
                                 for (int y = ConfigHolder.SERVER.NEIGHBOR_RANGE_CHECK.get() / -2; y < ConfigHolder.SERVER.NEIGHBOR_RANGE_CHECK.get() / 2; y++) {
@@ -86,7 +82,7 @@ public class SporeBlossomsPollinateModEvents {
                                                         CropBlock cropBlock = (CropBlock) block;
                                                         int max = cropBlock.getMaxAge();
 
-                                                        if (sbs.size() > 0 && age < max - 3)//7 -2 = 5 == The max age of vanilla crops. stage 6 and 7 are decay stages.
+                                                        if (!sbs.isEmpty() && age < max - 3)//7 -2 = 5 == The max age of vanilla crops. stage 6 and 7 are decay stages.
                                                         {
                                                             applyBonemeal(level, pos);
                                                             triggers.put(pos, TIME_FROM_NOW(COOLDOWN * (age * 2) + COOLDOWN));
@@ -98,7 +94,7 @@ public class SporeBlossomsPollinateModEvents {
                                             }
                                         }
                                     }
-                                    catch(Exception e)
+                                    catch(Exception ignored)
                                     {
 
                                     }
@@ -148,9 +144,8 @@ public class SporeBlossomsPollinateModEvents {
 
     public static boolean applyBonemeal(Level level, BlockPos blockPos) {
         BlockState blockstate = level.getBlockState(blockPos);
-        if (blockstate.getBlock() instanceof BonemealableBlock)
+        if (blockstate.getBlock() instanceof BonemealableBlock bonemealableblock)
         {
-            BonemealableBlock bonemealableblock = (BonemealableBlock)blockstate.getBlock();
             if (bonemealableblock.isValidBonemealTarget(level, blockPos, blockstate, level.isClientSide))
             {
                 if (level instanceof ServerLevel)

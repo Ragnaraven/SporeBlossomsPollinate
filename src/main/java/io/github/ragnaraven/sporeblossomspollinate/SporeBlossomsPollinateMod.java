@@ -1,10 +1,7 @@
 package io.github.ragnaraven.sporeblossomspollinate;
 
 import io.github.ragnaraven.sporeblossomspollinate.config.ConfigHolder;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
